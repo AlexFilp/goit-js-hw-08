@@ -39,9 +39,5 @@ function saveCurrentData() {
       formData[name] = value;
       form.elements[name].value = value;
     });
-
-    // form.email.value = parsedSaveData.email;
-
-    // form.message.value = parsedSaveData.message;
   }
 }
