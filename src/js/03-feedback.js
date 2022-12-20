@@ -18,7 +18,7 @@ function onFormSubmit(evt) {
   evt.currentTarget.reset();
 
   localStorage.removeItem(DATA_STORAGE);
-  user = {
+  const user = {
     email: formData.email,
     message: formData.message,
   };
