@@ -1,4 +1,5 @@
 import Player from '@vimeo/player';
+import throttle from 'lodash.throttle';
 
 console.log(Player);
 
@@ -19,13 +20,20 @@ player.getVideoTitle().then(function (title) {
 });
 
 function onPlay(data) {
-  console.log(data);
+  // console.log(data);
+  const CurrentTime = data.seconds;
+  console.log(CurrentTime);
+  localStorage.setItem(STORAGE_KEY, CurrentTime);
 }
 
-player.on('timeupdate', onPlay);
+const STORAGE_KEY = 'videoplayer-current-time';
+
+const savedCurrentTime = localStorage.getItem(STORAGE_KEY);
+
+player.on('timeupdate', throttle(onPlay, 1000));
 
 player
-  .setCurrentTime(30.456)
+  .setCurrentTime(savedCurrentTime)
   .then(function (seconds) {
     // seconds = the actual time that the player seeked to
   })
