@@ -4,40 +4,49 @@ const form = document.querySelector('.feedback-form');
 
 let formData = {};
 
-const DATA_STORAGE = 'feedback-form-state';
+const DATA_STORAGE = 'saved-form-data';
 
 form.addEventListener('input', throttle(onTypeInput, 500));
 form.addEventListener('submit', onFormSubmit);
 
+getSavedformData();
+
 function onTypeInput(event) {
   formData[event.target.name] = event.target.value;
+
+  // const email = form.elements.email.value;
+  // const message = form.elements.message.value;
+
+  // formData = {
+  //   email,
+  //   message,
+  // };
 
   localStorage.setItem(DATA_STORAGE, JSON.stringify(formData));
 }
 
 function onFormSubmit(evt) {
   evt.preventDefault();
-  evt.currentTarget.reset();
+  form.reset();
+
+  console.log(formData);
 
   localStorage.removeItem(DATA_STORAGE);
 
-  if (formData !== {}) {
-    console.log(formData);
-    formData = {};
-  }
+  formData = {};
 }
 
-saveCurrentData();
+function getSavedformData() {
+  let savedformData = localStorage.getItem(DATA_STORAGE);
 
-function saveCurrentData() {
-  let savedData = localStorage.getItem(DATA_STORAGE);
-
-  if (savedData) {
-    savedData = JSON.parse(savedData);
-
-    Object.entries(savedData).forEach(([name, value]) => {
-      formData[name] = value;
-      form.elements[name].value = value;
-    });
+  if (!savedformData) {
+    return;
   }
+
+  savedformData = JSON.parse(savedformData);
+
+  Object.keys(savedformData).map(name => {
+    form.elements[name].value = savedformData[name];
+    formData[name] = form.elements[name].value;
+  });
 }
